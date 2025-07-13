@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_train_app/pages/station/station_list_page.dart';
 
 /// HomePage 위젯:
 /// 나중에 출발역, 도착역 등 선택 상태를 관리해야 하므로 StatefulWidget으로 시작한다.
@@ -41,9 +42,20 @@ class _HomePageState extends State<HomePage> {
                   // ---여기는 출발역---
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        // TODO: StationListPage로 이동해서 출발역 선택 결과 받기!!!
-                        print('출발역 선택 박스 클릭함');
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const StationListPage(title: '출발역'),
+                          ),
+                        );
+
+                        if (result != null && result is String) {
+                          setState(() {
+                            _selectedDepartStation = result;
+                          });
+                        }
                       },
 
                       child: Column(
@@ -79,9 +91,20 @@ class _HomePageState extends State<HomePage> {
                   // ----여기는 도착역----
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        // TODO: StationListPage로 이동하고 도착역 선택 결과 받기
-                        print('도착역 선택 박스 클릭함');
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const StationListPage(title: '도착역'),
+                          ),
+                        );
+
+                        if (result != null && result is String) {
+                          setState(() {
+                            _selectedArrivStation = result;
+                          });
+                        }
                       },
                       //도착역 부분의 글자 스타일은 출발역 부분과 동일
                       child: Column(
