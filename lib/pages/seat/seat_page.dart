@@ -93,93 +93,120 @@ class _SeatPageState extends State<SeatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('좌석 선택')),
-      body: Column(
-        // 전체 body는 column으로 감싸고 아래 좌석 부분만 listview!
-        children: [
-          // [출발역, 도착역]
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.departure,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple,
-                      fontSize: 30,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          // 전체 body는 column으로 감싸고 아래 좌석 부분만 listview!
+          children: [
+            // [출발역, 도착역]
+            Column(
+              children: [
+                Row(
+                  // 역 이름 길어져도 알아서 정렬되도록 expanded - flex 활용
+                  children: [
+                    /// 첫번째 expanded: 출발역
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          widget.departure,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purple,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // 두번째 expanded: 화살표 아이콘
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: const Icon(
+                          Icons.arrow_circle_right_outlined,
+                          size: 30,
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ),
+
+                    // 세번째 expanded: 도착역
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          widget.arrival,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purple,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildSeatStatusLabel(color: Colors.purple, text: '선택됨'),
+                    const SizedBox(width: 20),
+                    _buildSeatStatusLabel(
+                      color: Colors.grey[300]!,
+                      text: '선택안됨',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.builder(
+                  itemCount: _seats.length + 1,
+                  itemBuilder: (context, rowIndex) {
+                    if (rowIndex == 0) {
+                      return _buildHeaderRow(); //column A,B,C,D
+                    } else {
+                      return _buildSeatRow(_seats[rowIndex - 1], rowIndex - 1);
+                    }
+                  },
+                ),
+              ),
+            ),
+
+            // 예매하기 버튼
+            Container(
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _selectedSeat == null ? null : _showBookingConfirm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  // 가운데 아이콘
-                  const Icon(
-                    Icons.arrow_circle_right_outlined,
-                    size: 30,
-                    color: Colors.purple,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    widget.arrival,
-                    style: const TextStyle(
+                  child: Text(
+                    '예매 하기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.purple,
-                      fontSize: 30,
                     ),
                   ),
-                ],
-              ),
-
-              const SizedBox(height: 30),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSeatStatusLabel(color: Colors.purple, text: '선택됨'),
-                  const SizedBox(width: 20),
-                  _buildSeatStatusLabel(color: Colors.grey[300]!, text: '선택안됨'),
-                ],
-              ),
-            ],
-          ),
-
-          Expanded(
-            child: ListView.builder(
-              itemCount: _seats.length + 1,
-              itemBuilder: (context, rowIndex) {
-                if (rowIndex == 0) {
-                  return _buildHeaderRow(); //column A,B,C,D
-                } else {
-                  return _buildSeatRow(_seats[rowIndex - 1], rowIndex - 1);
-                }
-              },
-            ),
-          ),
-
-          // 예매하기 버튼
-          Container(
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: _selectedSeat == null ? null : _showBookingConfirm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: Text(
-                  '예매 하기',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -217,7 +244,7 @@ Widget _buildHeaderRow() {
           ),
         );
       }),
-      const SizedBox(width: 20),
+      const SizedBox(width: 10),
     ],
   );
 }
