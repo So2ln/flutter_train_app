@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_train_app/pages/seat/seat_page.dart';
 import 'package:flutter_train_app/pages/station/station_list_page.dart';
 
 /// HomePage 위젯:
@@ -141,8 +142,24 @@ class _HomePageState extends State<HomePage> {
               height: 56,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: SeatPage로 이동하는 로직 여기에 삽입!!!
-                  print('좌석 선택 버튼 클릭함');
+                  if (_selectedDepartStation == '선택' ||
+                      _selectedArrivStation == '선택') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('출발역과 도착역을 모두 선택해주세요!')),
+                    );
+                    return;
+                  }
+
+                  /// seatpage로 이동!
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SeatPage(
+                        departure: _selectedDepartStation,
+                        arrival: _selectedArrivStation,
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors
