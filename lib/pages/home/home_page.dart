@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   // ====6. 구분선====
+                  // 나는 container로 했는데, 시간 남으면 verticalDivider 사용법도 알아봐야겠음.
                   Container(
                     width: 2,
                     height: 50,
