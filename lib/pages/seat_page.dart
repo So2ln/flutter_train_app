@@ -22,7 +22,7 @@ class SeatPage extends StatefulWidget {
 }
 
 class _SeatPageState extends State<SeatPage> {
-  List<List<Seat>> _seats = []; // 좌석 데이터
+  final List<List<Seat>> _seats = []; // 좌석 데이터
 
   // 현재 선택된 좌석
   Seat? _selectedSeat;
