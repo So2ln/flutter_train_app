@@ -29,7 +29,7 @@ class _SeatPageState extends State<SeatPage> {
 
   @override
   void initState() {
-    super.initState(); // 이게 뭔지 모르겠는데, 추가하니까 오류가 사라짐! 아마 상태를 받는거같음.
+    super.initState(); // 이게 뭔지 모르겠는데, 추가하니까 경고가 사라짐! 아마 상태를 받는거같음.
     // 좌석 리스트 초기화
     for (int r = 0; r < 20; r++) {
       List<Seat> rowSeats = [];

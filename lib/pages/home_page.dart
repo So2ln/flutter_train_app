@@ -47,14 +47,20 @@ class _HomePageState extends State<HomePage> {
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const StationListPage(title: '출발역'),
+                            builder: (context) => StationListPage(
+                              title: '출발역',
+                              // excludedStation: null,
+                            ),
                           ),
                         );
 
                         if (result != null && result is String) {
                           setState(() {
                             _selectedDepartStation = result;
+                            if (_selectedDepartStation ==
+                                _selectedArrivStation) {
+                              _selectedArrivStation = "선택";
+                            }
                           });
                         }
                       },
@@ -96,8 +102,12 @@ class _HomePageState extends State<HomePage> {
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const StationListPage(title: '도착역'),
+                            builder: (context) => StationListPage(
+                              title: '도착역',
+                              // excludedStation: _selectedDepartStation == "선택"
+                              // ? null
+                              // : _selectedDepartStation,
+                            ),
                           ),
                         );
 
