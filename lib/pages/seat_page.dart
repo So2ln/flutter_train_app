@@ -71,7 +71,7 @@ class _SeatPageState extends State<SeatPage> {
 
   // 좌석 예매 확인하기 팝업
   void _showBookingConfirm() {
-    if (_selectedSeat != null) {
+    if (_selectedSeat == null) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('좌석을 선택해주세요.')));
