@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_train_app/pages/seat/seat_page.dart';
-import 'package:flutter_train_app/pages/station/station_list_page.dart';
+import 'package:flutter_train_app/pages/seat_page.dart';
+import 'package:flutter_train_app/pages/station_list_page.dart';
 
 /// HomePage 위젯:
 /// 나중에 출발역, 도착역 등 선택 상태를 관리해야 하므로 StatefulWidget으로 시작한다.
@@ -155,8 +155,8 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => SeatPage(
-                        departure: _selectedDepartStation,
-                        arrival: _selectedArrivStation,
+                        departureStation: _selectedDepartStation,
+                        arrivalStation: _selectedArrivStation,
                       ),
                     ),
                   );
