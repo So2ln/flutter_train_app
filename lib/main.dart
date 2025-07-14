@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // MateriaApp은 Google의 Material Design 가이드라인을 따르는 앱을 만들 때 사용하는 기본 위젯!
     return MaterialApp(
-      title: '기차 예매 서비스',
+      title: '기차 예매',
+      debugShowCheckedModeBanner: false,
       // theme: ThemeData(primarySwatch: Colors.amber),
       home: HomePage(),
     );
