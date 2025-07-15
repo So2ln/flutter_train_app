@@ -47,9 +47,7 @@ class _SeatPageState extends State<SeatPage> {
 
       //이미 예약된 좌석은 선택할 수 없도록
       if (tappedSeat.isBooked) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('이미 예약된 좌석입니다.')));
+        _showCustomCupertinoAlert('이미 예약된 좌석입니다.');
         return;
       }
       // 이미 선택된 좌석이 있다면, 그 좌석의 선택 상태 해제
@@ -72,18 +70,19 @@ class _SeatPageState extends State<SeatPage> {
   // 좌석 예매 확인하기 팝업
   void _showBookingConfirm() {
     if (_selectedSeat == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('좌석을 선택해주세요.')));
+      _showCustomCupertinoAlert('좌석을 선택해주세요!');
       return;
     }
+
+    //
+    final String seatId = _selectedSeat!.seatID;
 
     showCupertinoDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Text('예매 하시겠습니까?'),
-          content: Text('좌석 : ${_selectedSeat!.seatID}'),
+          content: Text('좌석 : $seatId'),
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
@@ -101,10 +100,11 @@ class _SeatPageState extends State<SeatPage> {
                     _selectedSeat = null;
                   }
                 });
+                // '예매하시겠습니까?' 팝업 닫기
                 Navigator.of(context).pop();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text('예매가 완료되었습니다.')));
+
+                // 예매 완료 안내 팝업
+                _showCustomCupertinoAlert('예매가 완료되었습니다.');
               },
               child: const Text('확인'),
             ),
@@ -149,5 +149,41 @@ class _SeatPageState extends State<SeatPage> {
         ),
       ),
     );
+  }
+
+  // 커스텀 알림 팝업 (1.5초 후 자동 닫힘)
+  // CupertinoAlertDialog 위젯을 사용하여 iOS 스타일의 팝업 만들기!
+  void _showCustomCupertinoAlert(String message) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        // CupertinoAlertDialog 위젯
+        return CupertinoAlertDialog(
+          content: Text(message, style: TextStyle(fontSize: 18)), // 안내 메시지
+          /// 버튼을 눌러서 팝업 닫게 하려면 아래 코드
+          // actions: <Widget>[
+          //   CupertinoDialogAction(
+          //     child: Text('확인'),
+          //     onPressed: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //   ),
+          // ],
+        );
+      },
+    );
+
+    // 1.5초(1500밀리초) 후에 자동으로 팝업 닫기
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      //자꾸 오류 떠서 추가
+      // 현재 context가 유효한지 확인
+      if (!mounted) return; // 위젯이 트리에 없으면 더 이상 진행하지 않음
+
+      // 현재 context가 유효하다면, 팝업 닫기
+      // 팝업이 아직 화면에 있다면 닫기
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 }

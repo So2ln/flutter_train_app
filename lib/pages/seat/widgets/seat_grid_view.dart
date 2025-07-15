@@ -40,9 +40,9 @@ class SeatGridView extends StatelessWidget {
           // row: B label
           _buildSeatLabelBox('B'),
 
-          // 행 번호가 들어갈 자리를 _buildSeatLabelBox(null)로 비워둡니다.
+          // 행 번호가 들어갈 자리를 _buildSeatLabelBox(null)로 비우기
           const SizedBox(width: 20), // B와 빈 공간 사이 간격
-          _buildSeatLabelBox(null), // 💡 50x50 투명 박스
+          _buildSeatLabelBox(null), // 50x50 투명 박스
           const SizedBox(width: 20), // 빈 공간과 C 사이 간격
           // row: C label
           _buildSeatLabelBox('C'),
