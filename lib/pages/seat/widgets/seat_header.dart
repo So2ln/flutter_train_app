@@ -12,6 +12,9 @@ class SeatHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = Theme.of(context).colorScheme.secondary;
+    final seatColor = Theme.of(context).colorScheme.surfaceContainer;
+
     return Column(
       children: [
         // 출발역, 도착역 정보
@@ -38,10 +41,10 @@ class SeatHeader extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Center(
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_circle_right_outlined,
                   size: 30,
-                  color: Colors.purple,
+                  color: iconColor,
                 ),
               ),
             ),
@@ -69,9 +72,9 @@ class SeatHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildSeatStatusLabel(color: Colors.purple, text: '선택됨'),
+            _buildSeatStatusLabel(context, color: Colors.purple, text: '선택됨'),
             const SizedBox(width: 20),
-            _buildSeatStatusLabel(color: Colors.grey[300]!, text: '선택안됨'),
+            _buildSeatStatusLabel(context, color: seatColor, text: '선택안됨'),
           ],
         ),
       ],
@@ -80,7 +83,13 @@ class SeatHeader extends StatelessWidget {
 }
 
 // 좌석 상태 레이블 UI 위젯
-Widget _buildSeatStatusLabel({required Color color, required String text}) {
+Widget _buildSeatStatusLabel(
+  BuildContext context, {
+  required Color color,
+  required String text,
+}) {
+  final textColor = Theme.of(context).colorScheme.onSurface;
+
   return Row(
     children: [
       Container(
@@ -92,7 +101,7 @@ Widget _buildSeatStatusLabel({required Color color, required String text}) {
         ),
       ),
       const SizedBox(width: 4),
-      Text(text),
+      Text(text, style: TextStyle(color: textColor)),
     ],
   );
 }

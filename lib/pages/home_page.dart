@@ -19,11 +19,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final containerColor = Theme.of(context).colorScheme.surface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
+    final wallColor = Theme.of(context).scaffoldBackgroundColor;
+
+    // Scaffold: 앱의 기본 구조를 제공하는 위젯
+    // 1. 앱바, 2. body영역, 3. floatingActionButton 등
     return Scaffold(
       // 1. 앱바
       appBar: AppBar(title: const Text('기차 예매')),
       // 2. body영역
-      backgroundColor: Colors.grey[200],
+      // 테마 설정
+      // backgroundColor: Colors.grey[200],
+      backgroundColor: wallColor,
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -35,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               height: 200, // 높이
               decoration: BoxDecoration(
-                color: Colors.white, // 색상
+                color: containerColor, // 색상 - 테마별로
                 borderRadius: BorderRadius.circular(20), // 모서리 둥글기
               ),
               child: Row(
@@ -165,7 +173,13 @@ class _HomePageState extends State<HomePage> {
                   if (_selectedDepartStation == '선택' ||
                       _selectedArrivStation == '선택') {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('출발역과 도착역을 모두 선택해주세요!')),
+                      SnackBar(
+                        content: Text(
+                          '출발역과 도착역을 모두 선택해주세요!',
+                          style: TextStyle(color: textColor),
+                        ),
+                        backgroundColor: containerColor, // 스낵바 배경색을 surface로 설정
+                      ),
                     );
                     return;
                   }

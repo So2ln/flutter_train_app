@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_train_app/pages/home_page.dart';
+import 'package:flutter_train_app/styles/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '기차 예매',
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(primarySwatch: Colors.amber),
+
+      // 앱의 테마 설정
+      themeMode: ThemeMode.light, // 시스템 테마를 따름
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: HomePage(),
     );
   }

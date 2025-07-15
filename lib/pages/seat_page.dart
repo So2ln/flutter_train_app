@@ -89,10 +89,13 @@ class _SeatPageState extends State<SeatPage> {
               onPressed: () {
                 Navigator.of(context).pop(); // 팝업 닫기
               },
-              child: const Text('취소'),
+              child: Text(
+                '취소',
+                style: TextStyle(color: CupertinoColors.activeBlue),
+              ), // theme.dart에서 seed color를 보라색으로 하는 바람에 default는 보라색이 됨. 그래서 따로 지정해줘야한다~
             ),
             CupertinoDialogAction(
-              isDefaultAction: true,
+              isDestructiveAction: true,
               onPressed: () {
                 setState(() {
                   if (_selectedSeat != null) {
@@ -106,7 +109,7 @@ class _SeatPageState extends State<SeatPage> {
                 // 예매 완료 안내 팝업
                 _showCustomCupertinoAlert('예매가 완료되었습니다.');
               },
-              child: const Text('확인'),
+              child: Text('확인'), // 얘는 isDestructiveAction 때문에 자동으로 빨간색이 됨
             ),
           ],
         );
@@ -116,9 +119,11 @@ class _SeatPageState extends State<SeatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final wallColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
+      backgroundColor: wallColor,
       appBar: AppBar(title: Text('좌석 선택')),
-      backgroundColor: Colors.grey[200],
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

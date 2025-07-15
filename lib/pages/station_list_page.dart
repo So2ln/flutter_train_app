@@ -73,6 +73,7 @@ class _StationListState extends State<StationListPage> {
               child: Text(
                 stationName,
                 style: const TextStyle(
+                  //근데 얘는 왜 테마에 따라 색상 지정 안해줘도 잘 바뀌지????
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

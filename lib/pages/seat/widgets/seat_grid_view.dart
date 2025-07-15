@@ -19,53 +19,61 @@ class SeatGridView extends StatelessWidget {
       itemCount: seats.length + 1,
       itemBuilder: (context, rowIndex) {
         if (rowIndex == 0) {
-          return _buildHeaderRow(); //column A,B,C,D
+          return _buildHeaderRow(context); //column A,B,C,D
         } else {
-          return _buildSeatRow(seats[rowIndex - 1], rowIndex - 1);
+          return _buildSeatRow(context, seats[rowIndex - 1], rowIndex - 1);
         }
       },
     );
   }
 
   // ABCD labeling column UI 위젯
-  Widget _buildHeaderRow() {
+  Widget _buildHeaderRow(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // row: A label
-          _buildSeatLabelBox('A'),
+          _buildSeatLabelBox(context, 'A'),
           const SizedBox(width: 4),
           // row: B label
-          _buildSeatLabelBox('B'),
+          _buildSeatLabelBox(context, 'B'),
 
           // 행 번호가 들어갈 자리를 _buildSeatLabelBox(null)로 비우기
           const SizedBox(width: 20), // B와 빈 공간 사이 간격
-          _buildSeatLabelBox(null), // 50x50 투명 박스
+          _buildSeatLabelBox(context, null), // 50x50 투명 박스
           const SizedBox(width: 20), // 빈 공간과 C 사이 간격
           // row: C label
-          _buildSeatLabelBox('C'),
+          _buildSeatLabelBox(context, 'C'),
           const SizedBox(width: 4),
           // row: D label
-          _buildSeatLabelBox('D'),
+          _buildSeatLabelBox(context, 'D'),
         ],
       ),
     );
   }
 
   // ABCD label을 감싸는 50x50 박스 추가
-  Widget _buildSeatLabelBox(String? label) {
+  Widget _buildSeatLabelBox(BuildContext context, String? label) {
+    final textColor = Theme.of(context).colorScheme.onSurface;
+
     return Container(
       width: 50,
       height: 50,
       alignment: Alignment.center,
-      child: label != null ? Text(label, style: TextStyle(fontSize: 18)) : null,
+      child: label != null
+          ? Text(label, style: TextStyle(fontSize: 18, color: textColor))
+          : null,
     );
   }
 
   // 각 좌석의 column UI
-  Widget _buildSeatRow(List<Seat> rowSeats, int rowIndex) {
+  Widget _buildSeatRow(
+    BuildContext context,
+    List<Seat> rowSeats,
+    int rowIndex,
+  ) {
     final actualRowNum = rowIndex + 1;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -73,34 +81,35 @@ class SeatGridView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // A열 좌석 (idx: 0)
-          _buildSeatWidget(rowSeats[0]),
+          _buildSeatWidget(context, rowSeats[0]),
           const SizedBox(width: 4),
           //B열 좌석
-          _buildSeatWidget(rowSeats[1]),
+          _buildSeatWidget(context, rowSeats[1]),
 
           // column labeling box
           const SizedBox(width: 20),
 
           // 행 번호를 _buildSeatLabelBox로 그리기
-          _buildSeatLabelBox('$actualRowNum'), // 행 번호 출력
+          _buildSeatLabelBox(context, '$actualRowNum'), // 행 번호 출력
           const SizedBox(width: 20),
 
           // C열 좌석 (idx: 2)
-          _buildSeatWidget(rowSeats[2]),
+          _buildSeatWidget(context, rowSeats[2]),
           const SizedBox(width: 4),
           //D열 좌석 (idx: 3)
-          _buildSeatWidget(rowSeats[3]),
+          _buildSeatWidget(context, rowSeats[3]),
         ],
       ),
     );
   }
 
-  Widget _buildSeatWidget(Seat seat) {
-    Color seatColor;
+  Widget _buildSeatWidget(BuildContext context, Seat seat) {
+    final seatColor = Theme.of(context).colorScheme.surfaceContainer;
+    Color selectColor;
     if (seat.isSelected) {
-      seatColor = Colors.purple;
+      selectColor = Colors.purple;
     } else {
-      seatColor = Colors.grey[300]!;
+      selectColor = seatColor;
     }
     return GestureDetector(
       onTap: () => onSeatTap(seat.row, seat.col),
@@ -108,7 +117,7 @@ class SeatGridView extends StatelessWidget {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: seatColor,
+          color: selectColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: (seat.isSelected && selectedSeat == seat)
