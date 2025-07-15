@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class StationListPage extends StatefulWidget {
   // HomePAge에서 '출발역'인지 '도착역'인지 정보 받기 (생성자)
   final String title; // AppBar title로 사용할 문자열
-  String? stationToExclude;
+  final String? stationToExclude;
 
-  StationListPage({
+  const StationListPage({
     super.key,
     required this.title,
     required this.stationToExclude,
