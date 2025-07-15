@@ -44,12 +44,18 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        // [도전과제!] 만약 '도착역'에서 역이 선택되었다면 해당 역 제거
+                        final String? excludeStation =
+                            _selectedArrivStation != '선택'
+                            ? _selectedArrivStation
+                            : null;
+
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => StationListPage(
                               title: '출발역',
-                              // excludedStation: null,
+                              stationToExclude: excludeStation,
                             ),
                           ),
                         );
@@ -57,10 +63,10 @@ class _HomePageState extends State<HomePage> {
                         if (result != null && result is String) {
                           setState(() {
                             _selectedDepartStation = result;
-                            if (_selectedDepartStation ==
-                                _selectedArrivStation) {
-                              _selectedArrivStation = "선택";
-                            }
+                            // if (_selectedDepartStation ==
+                            //     _selectedArrivStation) {
+                            //   _selectedArrivStation = "선택";
+                            // }
                           });
                         }
                       },
@@ -99,14 +105,18 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        // [도전과제!] 만약 '출발역'에서 역이 선택되었다면 해당 역 제거
+                        final String? excludeStation =
+                            _selectedDepartStation != '선택'
+                            ? _selectedDepartStation
+                            : null;
+
                         final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => StationListPage(
                               title: '도착역',
-                              // excludedStation: _selectedDepartStation == "선택"
-                              // ? null
-                              // : _selectedDepartStation,
+                              stationToExclude: excludeStation,
                             ),
                           ),
                         );

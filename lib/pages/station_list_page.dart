@@ -3,15 +3,20 @@ import 'package:flutter/material.dart';
 class StationListPage extends StatefulWidget {
   // HomePAge에서 '출발역'인지 '도착역'인지 정보 받기 (생성자)
   final String title; // AppBar title로 사용할 문자열
+  String? stationToExclude;
 
-  const StationListPage({super.key, required this.title}); //생성자
+  StationListPage({
+    super.key,
+    required this.title,
+    required this.stationToExclude,
+  }); //생성자
 
   @override
   State<StationListPage> createState() => _StationListState();
 }
 
 class _StationListState extends State<StationListPage> {
-  final List<String> stations = const [
+  final List<String> _allStations = [
     "수서",
     "동탄",
     "평택지제",
@@ -25,15 +30,31 @@ class _StationListState extends State<StationListPage> {
     "부산",
   ];
 
+  late List<String> _displayStations;
+
+  @override
+  void initState() {
+    super.initState();
+    // make displayStations based on allStations
+    _displayStations = List.from(_allStations);
+    // Check if stationName is provided and is not empty
+    if (widget.stationToExclude != null &&
+        widget.stationToExclude!.isNotEmpty) {
+      _displayStations.remove(
+        widget.stationToExclude,
+      ); // Use remove to remove a specific item
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
 
       body: ListView.builder(
-        itemCount: stations.length,
+        itemCount: _displayStations.length,
         itemBuilder: (context, index) {
-          final String stationName = stations[index];
+          String stationName = _displayStations[index];
           return GestureDetector(
             onTap: () {
               // 선택된 역 이름을 이전 페이지(HomePage)로 돌려줌
