@@ -2,13 +2,13 @@ class Seat {
   final int row;
   final int col;
   bool isSelected;
-  final bool isBooked;
+  // final bool isBooked;
 
   Seat({
     required this.row,
     required this.col,
     this.isSelected = false,
-    this.isBooked = false,
+    // this.isBooked = false,
   });
 
   String get seatID {

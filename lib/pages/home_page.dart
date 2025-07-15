@@ -16,12 +16,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _selectedDepartStation = '선택';
   String _selectedArrivStation = '선택';
+  int _selectedPassengers = 1; // 선택된 인원 수 (기본값 1) <--- 추가기능!!!
 
   @override
   Widget build(BuildContext context) {
     final containerColor = Theme.of(context).colorScheme.surface;
     final textColor = Theme.of(context).colorScheme.onSurface;
     final wallColor = Theme.of(context).scaffoldBackgroundColor;
+    final iconColor = Theme.of(context).colorScheme.secondary;
 
     // Scaffold: 앱의 기본 구조를 제공하는 위젯
     // 1. 앱바, 2. body영역, 3. floatingActionButton 등
@@ -162,6 +164,86 @@ class _HomePageState extends State<HomePage> {
             // --- 여기까지 출발역, 도착역 감싸고 있는 박스
 
             // 좌석 선택 버튼과 출발역 및 도착역 감싸고 있는 박스의 간격: 20
+            SizedBox(height: 20),
+
+            /////////////////////////////////////////////////////////
+            /// -------- 인원 선택 버튼 추가하기!!! 도저어어언 ------- ///
+            ///
+            Container(
+              height: 100,
+              decoration: BoxDecoration(
+                color: containerColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Text(
+                      '인원 수',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  Flexible(
+                    flex: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // 감소 버튼
+                        IconButton(
+                          icon: Icon(
+                            Icons.remove_circle_outline,
+                            color: iconColor,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (_selectedPassengers > 1) {
+                                _selectedPassengers--;
+                              }
+                            });
+                          },
+                        ),
+
+                        // 선택된 인원 수 표시
+                        SizedBox(
+                          width: 100,
+                          child: Center(
+                            child: Text(
+                              '$_selectedPassengers명',
+                              style: TextStyle(fontSize: 24, color: textColor),
+                            ),
+                          ),
+                        ),
+
+                        // 증가 버튼
+                        IconButton(
+                          icon: Icon(
+                            Icons.add_circle_outline,
+                            color: iconColor,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _selectedPassengers++;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // 간격
             SizedBox(height: 20),
 
             // ----7. [좌석 선택 버튼]

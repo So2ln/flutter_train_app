@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // 앱의 테마 설정
-      themeMode: ThemeMode.light, // 시스템 테마를 따름
+      themeMode: ThemeMode.dark, // 시스템 테마를 따름
       theme: lightTheme,
       darkTheme: darkTheme,
       home: HomePage(),

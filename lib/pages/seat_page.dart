@@ -45,11 +45,11 @@ class _SeatPageState extends State<SeatPage> {
     setState(() {
       final tappedSeat = _seats[row][col];
 
-      //이미 예약된 좌석은 선택할 수 없도록
-      if (tappedSeat.isBooked) {
-        _showCustomCupertinoAlert('이미 예약된 좌석입니다.');
-        return;
-      }
+      // //이미 예약된 좌석은 선택할 수 없도록
+      // if (tappedSeat.isBooked) {
+      //   _showCustomCupertinoAlert('이미 예약된 좌석입니다.');
+      //   return;
+      // }
       // 이미 선택된 좌석이 있다면, 그 좌석의 선택 상태 해제
       if (_selectedSeat != null) {
         _selectedSeat!.isSelected = false;
