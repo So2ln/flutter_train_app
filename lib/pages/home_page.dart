@@ -1,4 +1,5 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_train_app/pages/seat_page.dart';
 import 'package:flutter_train_app/pages/station_list_page.dart';
@@ -232,7 +233,36 @@ class _HomePageState extends State<HomePage> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _selectedPassengers++;
+                              if (_selectedPassengers < 8) {
+                                // 인원 수 제한: 최대 8명
+                                // 나중에 서버에서 받아온 인원 수 제한으로 변경하기!
+                                _selectedPassengers++;
+                              } else {
+                                // 인원 수 제한 초과 시
+                                showCupertinoDialog(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) {
+                                    // 1.5초(1500밀리초) 후에 자동으로 팝업 닫기
+                                    // cupertinoAlertDialog 사용 전에 builder 맨 앞에서 future.delayed 설정
+                                    Future.delayed(
+                                      const Duration(milliseconds: 1500),
+                                      () {
+                                        if (dialogContext.mounted) {
+                                          Navigator.of(dialogContext).pop();
+                                        }
+                                      },
+                                    );
+
+                                    // CupertinoAlertDialog 위젯
+                                    return CupertinoAlertDialog(
+                                      content: Text(
+                                        '사과해요 나한테!! \n 인당 최대 8명 선택 가능!!!',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
                             });
                           },
                         ),

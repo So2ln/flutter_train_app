@@ -78,7 +78,7 @@ class _SeatPageState extends State<SeatPage> {
         // 인원 수 제한 초과 시
         else {
           _showCustomCupertinoAlert(
-            '사과해요 나한테!!! \n ${widget.countPassangers}명까지만 선택 가능!!!',
+            '전세냈는교? \n ${widget.countPassangers}명까지만 탄다 했다이가!!!',
           );
           return; // 인원 수 제한 초과 시 함수 종료
         }
