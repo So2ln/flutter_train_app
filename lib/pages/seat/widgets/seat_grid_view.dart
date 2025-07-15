@@ -3,13 +3,15 @@ import 'package:flutter_train_app/models/seat.dart';
 
 class SeatGridView extends StatelessWidget {
   final List<List<Seat>> seats;
-  final Seat? selectedSeat;
+  // final Seat? selectedSeat;
+  final List<Seat> multipleSelectedSeats; // 다중 선택된 좌석
   final Function(int row, int col) onSeatTap; // 좌석 탭 시 호출될 함수 전달받기
 
   const SeatGridView({
     super.key,
     required this.seats,
-    required this.selectedSeat,
+    // required this.selectedSeat,
+    required this.multipleSelectedSeats, // 다중 선택된 좌석
     required this.onSeatTap,
   });
 
@@ -103,11 +105,18 @@ class SeatGridView extends StatelessWidget {
     );
   }
 
+  // 각 좌석 위젯을 생성
+  // 좌석이 선택된 상태인지 확인하고 색상을 변경
   Widget _buildSeatWidget(BuildContext context, Seat seat) {
     final seatColor = Theme.of(context).colorScheme.surfaceContainer;
     Color selectColor;
-    if (seat.isSelected) {
+    Color borderColor = Colors.transparent;
+    double borderWidth = 0.0;
+
+    if (multipleSelectedSeats.contains(seat)) {
       selectColor = Colors.purple;
+      borderColor = Colors.purple.shade900;
+      borderWidth = 2.0;
     } else {
       selectColor = seatColor;
     }
@@ -119,12 +128,7 @@ class SeatGridView extends StatelessWidget {
         decoration: BoxDecoration(
           color: selectColor,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: (seat.isSelected && selectedSeat == seat)
-                ? Colors.purple.shade900
-                : Colors.transparent,
-            width: (seat.isSelected && selectedSeat == seat) ? 2.0 : 0.0,
-          ),
+          border: Border.all(color: borderColor, width: borderWidth),
         ),
         alignment: Alignment.center,
       ),

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class SeatHeader extends StatelessWidget {
   final String departureStation;
   final String arrivalStation;
+  final int countPassangers; // 선택된 인원 수
 
   const SeatHeader({
     super.key,
     required this.departureStation,
     required this.arrivalStation,
+    required this.countPassangers,
   });
 
   @override
@@ -66,14 +68,34 @@ class SeatHeader extends StatelessWidget {
           ],
         ),
 
+        // const SizedBox(height: 20),
+        // // 선택된 인원 수 표시
+        // Text(
+        //   '${countPassangers}명 선택',
+        //   style:  TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             color: iconColor,
+        //             fontSize: 30,
+        // ),
+        // ),
         const SizedBox(height: 20),
 
         // 좌석 상태 labeling
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+
           children: [
+            const SizedBox(width: 30),
+
+            _buildSeatStatusLabel(
+              context,
+              color: Colors.transparent,
+              text: '총 인원 : ${countPassangers}명',
+            ),
+            const SizedBox(width: 30),
+
             _buildSeatStatusLabel(context, color: Colors.purple, text: '선택됨'),
-            const SizedBox(width: 20),
+            const SizedBox(width: 30),
             _buildSeatStatusLabel(context, color: seatColor, text: '선택안됨'),
           ],
         ),

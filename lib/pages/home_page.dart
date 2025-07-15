@@ -273,6 +273,7 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) => SeatPage(
                         departureStation: _selectedDepartStation,
                         arrivalStation: _selectedArrivStation,
+                        countPassangers: _selectedPassengers, // 인원 수 전달!!
                       ),
                     ),
                   );

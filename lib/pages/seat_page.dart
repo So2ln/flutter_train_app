@@ -10,11 +10,13 @@ import 'package:flutter_train_app/pages/seat/widgets/seat_booking_button.dart';
 class SeatPage extends StatefulWidget {
   final String departureStation;
   final String arrivalStation;
+  final int countPassangers; // 선택된 인원 수!!
 
   const SeatPage({
     super.key,
     required this.departureStation,
     required this.arrivalStation,
+    required this.countPassangers,
   });
 
   @override
@@ -25,7 +27,8 @@ class _SeatPageState extends State<SeatPage> {
   final List<List<Seat>> _seats = []; // 좌석 데이터
 
   // 현재 선택된 좌석
-  Seat? _selectedSeat;
+  // Seat? _selectedSeat; // single choice selection
+  List<Seat> _multipleSelectedSeats = []; // multiple choice selection
 
   @override
   void initState() {
@@ -50,39 +53,60 @@ class _SeatPageState extends State<SeatPage> {
       //   _showCustomCupertinoAlert('이미 예약된 좌석입니다.');
       //   return;
       // }
-      // 이미 선택된 좌석이 있다면, 그 좌석의 선택 상태 해제
-      if (_selectedSeat != null) {
-        _selectedSeat!.isSelected = false;
-      }
-      // 새로 선택한 좌석의 선택 상태 업데이트
-      /// 이미 선택되어있으면 해제하는거고, 아니면 선택하는것
-      tappedSeat.isSelected = !tappedSeat.isSelected;
+
+      // // 이미 선택된 좌석이 있다면, 그 좌석의 선택 상태 해제
+      // if (_selectedSeat != null) {
+      //   _selectedSeat!.isSelected = false;
+      // }
+      // // 새로 선택한 좌석의 선택 상태 업데이트
+      // /// 이미 선택되어있으면 해제하는거고, 아니면 선택하는것
+      // tappedSeat.isSelected = !tappedSeat.isSelected;
 
       // _selectedSeat 변수 업데이트
       if (tappedSeat.isSelected) {
-        _selectedSeat = tappedSeat; // 새로 선택된 좌석으로 저장하기!
+        tappedSeat.isSelected = false; // 이미 선택된 좌석이면 선택 해제
+        _multipleSelectedSeats.remove(tappedSeat); // 선택 해제된 좌석 리스트에서 제거
       } else {
-        _selectedSeat = null; // 선택 해제되면 null값 출력
+        // 선택 안된 좌석이고,
+        //
+        //선택된 좌석의 수가 허용 인원보다 적으면 선택
+        if (_multipleSelectedSeats.length < widget.countPassangers) {
+          // 인원 수 제한!!!
+          tappedSeat.isSelected = true; // 새로 선택된 좌석의 선택 상태 업데이트
+          _multipleSelectedSeats.add(tappedSeat); // 선택된 좌석을 리스트에 추가
+        }
+        // 인원 수 제한 초과 시
+        else {
+          _showCustomCupertinoAlert(
+            '사과해요 나한테!!! \n ${widget.countPassangers}명까지만 선택 가능!!!',
+          );
+          return; // 인원 수 제한 초과 시 함수 종료
+        }
       }
     });
   }
 
   // 좌석 예매 확인하기 팝업
   void _showBookingConfirm() {
-    if (_selectedSeat == null) {
-      _showCustomCupertinoAlert('좌석을 선택해주세요!');
-      return;
-    }
+    // if (_multipleSelectedSeats.length != widget.countPassangers) {
+    //   // 리스트 길이와 인원 수 비교
+    //   _showCustomCupertinoAlert(
+    //     '사과해요 나한테!!! \n ${widget.countPassangers}개의 좌석을 모두 선택해주세요!',
+    //   );
+    //   return;
+    // }
 
     //
-    final String seatId = _selectedSeat!.seatID;
+    final String seatIds = _multipleSelectedSeats
+        .map((seat) => seat.seatID)
+        .join('\n');
 
     showCupertinoDialog(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: const Text('예매 하시겠습니까?'),
-          content: Text('좌석 : $seatId'),
+          content: Text('좌석 : \n$seatIds'),
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
@@ -98,11 +122,18 @@ class _SeatPageState extends State<SeatPage> {
               isDestructiveAction: true,
               onPressed: () {
                 setState(() {
-                  if (_selectedSeat != null) {
-                    _selectedSeat!.isSelected = false;
-                    _selectedSeat = null;
+                  // 선택된 좌석을 초기화
+                  for (var seat in _multipleSelectedSeats) {
+                    seat.isSelected = false; // 선택된 좌석의 선택 상태 해제
                   }
+                  _multipleSelectedSeats.clear(); // 선택된 좌석 리스트 초기화
                 });
+
+                //   if (_selectedSeat != null) {
+                //     _selectedSeat!.isSelected = false;
+                //     _selectedSeat = null;
+                //   }
+                // });
                 // '예매하시겠습니까?' 팝업 닫기
                 Navigator.of(context).pop();
 
@@ -133,6 +164,7 @@ class _SeatPageState extends State<SeatPage> {
             SeatHeader(
               departureStation: widget.departureStation,
               arrivalStation: widget.arrivalStation,
+              countPassangers: widget.countPassangers, // 인원 수 전달
             ),
             const SizedBox(height: 20),
 
@@ -140,15 +172,19 @@ class _SeatPageState extends State<SeatPage> {
             Expanded(
               child: SeatGridView(
                 seats: _seats,
-                selectedSeat: _selectedSeat,
+                // selectedSeat: _selectedSeat,
+                multipleSelectedSeats: _multipleSelectedSeats,
                 onSeatTap: _toggleSeatSelect,
               ),
             ),
 
             // 예매하기 버튼 (SeatBookingButton)
             SeatBookingButton(
+              // 선택된 좌석이 인원 수와 일치할 때만 활성화!!!!
               onPressed: _showBookingConfirm,
-              isSeatSelected: _selectedSeat != null,
+              // isSeatSelected: _selectedSeat != null,
+              isSeatSelected:
+                  _multipleSelectedSeats.length == widget.countPassangers,
             ),
           ],
         ),
