@@ -192,7 +192,7 @@ class _SeatPageState extends State<SeatPage> {
     );
   }
 
-  // 커스텀 알림 팝업 (1.5초 후 자동 닫힘)
+  // 커스텀 알림 팝업 (1.8초 후 자동 닫힘)
   // CupertinoAlertDialog 위젯을 사용하여 iOS 스타일의 팝업 만들기!
   void _showCustomCupertinoAlert(String message) {
     showCupertinoDialog(
@@ -214,8 +214,8 @@ class _SeatPageState extends State<SeatPage> {
       },
     );
 
-    // 1.5초(1500밀리초) 후에 자동으로 팝업 닫기
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    // 1.8초(1800밀리초) 후에 자동으로 팝업 닫기
+    Future.delayed(const Duration(milliseconds: 1800), () {
       //자꾸 오류 떠서 추가
       // 현재 context가 유효한지 확인
       if (!mounted) return; // 위젯이 트리에 없으면 더 이상 진행하지 않음
